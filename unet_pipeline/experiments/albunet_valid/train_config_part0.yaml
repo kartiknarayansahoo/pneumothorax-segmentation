@@ -1,6 +1,6 @@
 #main
 PIPELINE_NAME: albunet_1024
-DATA_DIRECTORY: '/kaggle/input/pneumothorax-png-dataset/dataset1024'
+DATA_DIRECTORY: 'pneumothorax-png-dataset/dataset1024'
 LOGGER_DIR: 'log'
 
 SEED: 42
@@ -10,7 +10,7 @@ WORKERS: 12
 
 MODEL:
   PRETRAINED: 
-    PIPELINE_PATH: /kaggle/working/pneumothorax-segmentation/unet_pipeline/experiments/albunet_valid/
+    PIPELINE_PATH: pneumothorax-segmentation/unet_pipeline/experiments/albunet_valid/
     CHECKPOINTS_FOLDER: checkpoints
     PIPELINE_NAME: albunet_1024
   FREEZE: False
@@ -22,16 +22,16 @@ MODEL:
 FOLD:
   NUMBER: 5
   USEFOLDS: [0,1,2,3,4]
-  FILE: folds/train_folds_5.csv
+  FILE: pneumothorax-segmentation/unet_pipeline/folds/train_folds_5.csv
 
 # preprocessing
 USE_SAMPLER: True
 NON_EMPTY_MASK_PROBA: 0.8
 
 TRAIN_TRANSFORMS:
-    transforms/train_transforms_complex_1024_old.json
+    pneumothorax-segmentation/unet_pipeline/transforms/train_transforms_complex_1024_old.json
 VALID_TRANSFORMS:
-    transforms/valid_transforms_1024_old.json
+    pneumothorax-segmentation/unet_pipeline/transforms/valid_transforms_1024_old.json
 
 # training
 CRITERION: 
