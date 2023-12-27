@@ -1,25 +1,23 @@
+from collections import defaultdict
+import heapq
+from pathlib import Path
+from tqdm import tqdm
+import numpy as np
+import pandas as pd
 import torch
 from torch.nn.utils import clip_grad_norm_
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-import pandas as pd
-import numpy as np
-
-from tqdm import tqdm
-from pathlib import Path
-
-import heapq
-from collections import defaultdict
 
 class Learning():
     def __init__(self,
-                 optimizer, 
+                 optimizer,
                  binarizer_fn,
                  loss_fn,
                  eval_fn,
                  device,
                  n_epoches,
-                 scheduler,    
+                 scheduler,
                  freeze_model,
                  grad_clip,
                  grad_accum,
@@ -30,7 +28,7 @@ class Learning():
                  checkpoints_history_folder,
                  checkpoints_topk,
                  logger
-        ):
+                 ):
         self.logger = logger
 
         self.optimizer = optimizer
@@ -49,16 +47,18 @@ class Learning():
 
         self.calculation_name = calculation_name
         self.best_checkpoint_path = Path(
-            best_checkpoint_folder, 
+            best_checkpoint_folder,
             '{}.pth'.format(self.calculation_name)
         )
         self.checkpoints_history_folder = Path(checkpoints_history_folder)
         self.checkpoints_topk = checkpoints_topk
         self.score_heap = []
-        self.summary_file = Path(self.checkpoints_history_folder, 'summary.csv')     
+        self.summary_file = Path(
+            self.checkpoints_history_folder, 'summary.csv')
         if self.summary_file.is_file():
             self.best_score = pd.read_csv(self.summary_file).best_metric.max()
-            logger.info('Pretrained best score is {:.5}'.format(self.best_score))
+            logger.info(
+                'Pretrained best score is {:.5}'.format(self.best_score))
         else:
             self.best_score = 0
         self.best_epoch = -1
@@ -71,14 +71,16 @@ class Learning():
             loss, predicted = self.batch_train(model, imgs, labels, batch_idx)
 
             # just slide average
-            current_loss_mean = (current_loss_mean * batch_idx + loss) / (batch_idx + 1)
+            current_loss_mean = (current_loss_mean *
+                                 batch_idx + loss) / (batch_idx + 1)
 
             tqdm_loader.set_description('loss: {:.4} lr:{:.6}'.format(
                 current_loss_mean, self.optimizer.param_groups[0]['lr']))
         return current_loss_mean
 
     def batch_train(self, model, batch_imgs, batch_labels, batch_idx):
-        batch_imgs, batch_labels = batch_imgs.to(self.device), batch_labels.to(self.device)
+        batch_imgs, batch_labels = batch_imgs.to(
+            self.device), batch_labels.to(self.device)
         predicted = model(batch_imgs)
         loss = self.loss_fn(predicted, batch_labels)
 
@@ -103,11 +105,13 @@ class Learning():
                 for current_thr, current_mask in zip(used_thresholds, mask_generator):
                     current_metric = self.eval_fn(current_mask, labels).item()
                     current_thr = tuple(current_thr)
-                    metrics[current_thr] = (metrics[current_thr] * batch_idx + current_metric) / (batch_idx + 1)
+                    metrics[current_thr] = (
+                        metrics[current_thr] * batch_idx + current_metric) / (batch_idx + 1)
 
                 best_threshold = max(metrics, key=metrics.get)
                 best_metric = metrics[best_threshold]
-                tqdm_loader.set_description('score: {:.5} on {}'.format(best_metric, best_threshold))
+                tqdm_loader.set_description(
+                    'score: {:.5} on {}'.format(best_metric, best_threshold))
 
         return metrics, best_metric
 
@@ -124,17 +128,20 @@ class Learning():
         epoch_summary = pd.DataFrame.from_dict([metrics])
         epoch_summary['epoch'] = epoch
         epoch_summary['best_metric'] = best_metric
-        epoch_summary = epoch_summary[['epoch', 'best_metric'] + list(metrics.keys())]
+        epoch_summary = epoch_summary[[
+            'epoch', 'best_metric'] + list(metrics.keys())]
         epoch_summary.columns = [str(col) for col in epoch_summary.columns]
-        
-        self.logger.info('{} epoch: \t Score: {:.5}\t Params: {}'.format(epoch, best_metric, best_threshold))
+
+        self.logger.info('{} epoch: \t Score: {:.5}\t Params: {}'.format(
+            epoch, best_metric, best_threshold))
 
         if not self.summary_file.is_file():
             epoch_summary.to_csv(self.summary_file, index=False)
         else:
             summary = pd.read_csv(self.summary_file)
-            summary = summary.append(epoch_summary).reset_index(drop=True)
-            summary.to_csv(self.summary_file, index=False)  
+            # summary = summary.append(epoch_summary).reset_index(drop=True)
+            summary = pd.concat([summary, pd.DataFrame([epoch_summary])], ignore_index=True)
+            summary.to_csv(self.summary_file, index=False)
 
     @staticmethod
     def get_state_dict(model):
@@ -149,7 +156,7 @@ class Learning():
             return
 
         checkpoints_history_path = Path(
-            self.checkpoints_history_folder, 
+            self.checkpoints_history_folder,
             '{}_epoch{}.pth'.format(self.calculation_name, epoch)
         )
 
@@ -158,12 +165,14 @@ class Learning():
         if len(self.score_heap) > self.checkpoints_topk:
             _, removing_checkpoint_path = heapq.heappop(self.score_heap)
             removing_checkpoint_path.unlink()
-            self.logger.info('Removed checkpoint is {}'.format(removing_checkpoint_path))
+            self.logger.info('Removed checkpoint is {}'.format(
+                removing_checkpoint_path))
         if score > self.best_score:
             self.best_score = score
             self.best_epoch = epoch
             torch.save(self.get_state_dict(model), self.best_checkpoint_path)
-            self.logger.info('best model: {} epoch - {:.5}'.format(epoch, score))
+            self.logger.info(
+                'best model: {} epoch - {:.5}'.format(epoch, score))
 
         if self.scheduler.__class__.__name__ == 'ReduceLROnPlateau':
             self.scheduler.step(score)
@@ -174,10 +183,12 @@ class Learning():
         model.to(self.device)
         for epoch in range(self.n_epoches):
             if not self.freeze_model:
-                self.logger.info('{} epoch: \t start training....'.format(epoch))
+                self.logger.info(
+                    '{} epoch: \t start training....'.format(epoch))
                 model.train()
                 train_loss_mean = self.train_epoch(model, train_dataloader)
-                self.logger.info('{} epoch: \t Calculated train loss: {:.5}'.format(epoch, train_loss_mean))
+                self.logger.info('{} epoch: \t Calculated train loss: {:.5}'.format(
+                    epoch, train_loss_mean))
 
             if epoch % self.validation_frequency != (self.validation_frequency - 1):
                 self.logger.info('skip validation....')
@@ -196,4 +207,3 @@ class Learning():
                 break
 
         return self.best_score, self.best_epoch
-        
