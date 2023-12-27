@@ -12,7 +12,7 @@ WORKERS: 4
 
 MODEL:
   PRETRAINED: 
-    PIPELINE_PATH: /kaggle/working/pneumothorax-segmentation/unet_pipeline/experiments/albunet_valid/
+    PIPELINE_PATH: pneumothorax-segmentation/unet_pipeline/experiments/albunet_valid/
     CHECKPOINTS_FOLDER: checkpoints
     PIPELINE_NAME: albunet_1024
   FREEZE: False
@@ -24,16 +24,16 @@ MODEL:
 FOLD:
   NUMBER: 5
   USEFOLDS: [0,1,2,3,4]
-  FILE: folds/2nd_stage_folds.csv
+  FILE: pneumothorax-segmentation/unet_pipeline/folds/2nd_stage_folds.csv
 
 # preprocessing
 USE_SAMPLER: True
 NON_EMPTY_MASK_PROBA: 0.4
 
 TRAIN_TRANSFORMS:
-    transforms/train_transforms_complex_1024_old.json
+    pneumothorax-segmentation/unet_pipeline/transforms/train_transforms_complex_1024_old.json
 VALID_TRANSFORMS:
-    transforms/valid_transforms_1024_old.json
+    pneumothorax-segmentation/unet_pipeline/transforms/valid_transforms_1024_old.json
 
 # training
 CRITERION: 
@@ -66,7 +66,8 @@ SCHEDULER:
 BATCH_SIZE: 2
 GRADIENT_ACCUMULATION_STEPS: 1
 GRADIENT_CLIPPING: 0.1
-EPOCHES: 40
+# EPOCHES: 40
+EPOCHES: 2
 EARLY_STOPPING: 12
 
 # saving
