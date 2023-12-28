@@ -1,12 +1,12 @@
 #main
 PIPELINE_NAME: albunet_1024
-DATA_DIRECTORY: '/kaggle/input/pneumothorax-png-dataset/dataset1024'
+DATA_DIRECTORY: '/kaggle/input/pneumothorax-200-png/dataset_1024_200'
 LOGGER_DIR: 'log'
 
 SEED: 42
 DEVICE: cuda
 DEVICE_LIST: [0]
-WORKERS: 12
+WORKERS: 4
 
 MODEL:
   PRETRAINED: 
@@ -22,7 +22,7 @@ MODEL:
 FOLD:
   NUMBER: 5
   USEFOLDS: [0,1,2,3,4]
-  FILE: pneumothorax-segmentation/unet_pipeline/folds/train_folds_5.csv
+  FILE: pneumothorax-segmentation/unet_pipeline/folds/train_200_folds_5.csv
 
 # preprocessing
 USE_SAMPLER: True

@@ -24,7 +24,7 @@ MODEL:
 FOLD:
   NUMBER: 5
   USEFOLDS: [0,1,2,3,4]
-  FILE: pneumothorax-segmentation/unet_pipeline/folds/2nd_stage_folds.csv
+  FILE: pneumothorax-segmentation/unet_pipeline/folds/train_200_folds_5.csv
 
 # preprocessing
 USE_SAMPLER: True
