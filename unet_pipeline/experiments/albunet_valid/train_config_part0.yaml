@@ -1,6 +1,6 @@
 #main
 PIPELINE_NAME: albunet_1024
-DATA_DIRECTORY: '/kaggle/input/pneumothorax-png-dataset/dataset1024'
+DATA_DIRECTORY: '/kaggle/input/pneumothorax-reduced-200-png/dataset_1024_200'
 LOGGER_DIR: 'log'
 
 SEED: 42
@@ -21,8 +21,8 @@ MODEL:
       pretrained: False
 
 FOLD:
-  NUMBER: 5
-  USEFOLDS: [0,1,2,3,4]
+  NUMBER: 1
+  USEFOLDS: [0]
   FILE: pneumothorax-segmentation/unet_pipeline/folds/train_folds_5.csv
 
 # preprocessing
