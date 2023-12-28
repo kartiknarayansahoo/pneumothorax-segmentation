@@ -142,8 +142,8 @@ class Learning():
             print(summary)
             print(epoch_summary)
             # summary = summary.append(epoch_summary).reset_index(drop=True)
-            summary = pd.concat([summary, pd.DataFrame(
-                [epoch_summary])], ignore_index=True, axis=1)
+            summary = pd.concat([summary, epoch_summary],
+                                ignore_index=True, axis=1)
             summary.to_csv(self.summary_file, index=False)
 
     @staticmethod
