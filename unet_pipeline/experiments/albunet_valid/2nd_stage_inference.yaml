@@ -14,7 +14,7 @@ MODEL:
 CHECKPOINTS:
   FULL_FOLDER: checkpoints
   BEST_FOLDER: checkpoints
-  PIPELINE_PATH: experiments/albunet_valid
+  PIPELINE_PATH: pneumothorax-segmentation/unet_pipeline/experiments/albunet_valid
   PIPELINE_NAME: albunet_1024
 
 SUBMIT_BEST: False
