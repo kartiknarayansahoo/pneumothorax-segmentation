@@ -121,6 +121,6 @@ def main():
 
     with open(result_path, 'wb') as handle:
         pickle.dump(mask_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        
+         
 if __name__ == "__main__":
     main()
