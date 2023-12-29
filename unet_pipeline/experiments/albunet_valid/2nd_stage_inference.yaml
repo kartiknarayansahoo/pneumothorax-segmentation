@@ -28,7 +28,7 @@ SELECTED_CHECKPOINTS:
 
 
 TEST_TRANSFORMS:
-    transforms/valid_transforms_1024_old.json
+    pneumothorax-segmentation/unet_pipeline/transforms/valid_transforms_1024_old.json
 FLIP: True
 
 RESULT: result_top3.pkl
