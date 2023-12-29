@@ -140,8 +140,7 @@ class Learning():
         else:
             summary = pd.read_csv(self.summary_file)
             # summary = summary.append(epoch_summary).reset_index(drop=True)
-            summary = pd.concat([summary, epoch_summary],
-                                ignore_index=True, axis=1)
+            summary = pd.concat([summary, epoch_summary], axis=1)
             print(summary)
             summary.to_csv(self.summary_file, index=False)
 
