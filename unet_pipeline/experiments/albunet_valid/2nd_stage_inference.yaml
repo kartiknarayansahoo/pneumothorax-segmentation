@@ -20,11 +20,11 @@ CHECKPOINTS:
 SUBMIT_BEST: False
 USEFOLDS: [0,1,2,3,4]
 SELECTED_CHECKPOINTS:
-  fold0: [7,13,17]
-  fold1: [3,5,14]
-  fold2: [0,3,8]
-  fold3: [0,5,8]
-  fold4: [16,24,25]
+  fold0: [0,1]
+  fold1: [0,1]
+  fold2: [0,1]
+  fold3: [0,1]
+  fold4: [0,1]
 
 
 TEST_TRANSFORMS:
