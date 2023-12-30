@@ -20,12 +20,11 @@ CHECKPOINTS:
 SUBMIT_BEST: False
 USEFOLDS: [0,1,2,3,4]
 SELECTED_CHECKPOINTS:
-  fold0: [0,1]
-  fold1: [0,1]
-  fold2: [0,1]
-  fold3: [0,1]
-  fold4: [0,1]
-
+  fold0: [7,10,14]
+  fold1: [6,12,13]
+  fold2: [8,11,12]
+  fold3: [9,12,14]
+  fold4: [10,13,14]
 
 TEST_TRANSFORMS:
     pneumothorax-segmentation/unet_pipeline/transforms/valid_transforms_1024_old.json
