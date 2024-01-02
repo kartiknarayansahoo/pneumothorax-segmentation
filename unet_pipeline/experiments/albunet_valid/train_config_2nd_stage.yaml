@@ -1,6 +1,6 @@
 #main
 PIPELINE_NAME: albunet_1024
-DATA_DIRECTORY: '/kaggle/input/pneumothorax-200-png/dataset_1024_200'
+DATA_DIRECTORY: '/kaggle/input/pneumothorax-200-png/dataset_1024_1000'
 LOGGER_DIR: 'log'
 
 SEED: 42
